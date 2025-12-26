@@ -1,4 +1,31 @@
+# Virtual environments
 .venv/
+venv/
+env/
+
+# Python cache
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Jupyter
 .ipynb_checkpoints/
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Model artifacts
+*.pkl
+*.joblib
+*.h5
+*.keras
+
+# Logs
+*.log
