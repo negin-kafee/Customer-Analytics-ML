@@ -114,6 +114,16 @@ Categorical Features:
 | Gradient Boosting | Ensemble | Sequential error correction |
 | XGBoost | Ensemble | Regularization, high performance |
 
+### Models Intentionally Excluded (and Why)
+
+| Missing Models | Why You Don't Need Them |
+|----------------|-------------------------|
+| PolynomialFeatures | Tree-based models capture non-linearity automatically |
+| SVR variants | Slow on >1000 samples, often worse than GradientBoosting |
+| RidgeCV/LassoCV | GridSearchCV on Ridge/Lasso does the same thing |
+| AdaBoost | GradientBoosting/XGBoost are more powerful successors |
+| BaggingRegressor | RandomForest IS a bagging method with better feature selection |
+
 ### Cross-Validation Results (5-Fold, R²)
 
 | Rank | Model | CV R² | Std Dev |
