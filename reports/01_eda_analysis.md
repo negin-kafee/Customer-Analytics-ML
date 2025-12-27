@@ -69,6 +69,17 @@ All others        0         0.00%
 
 **Action**: Impute Income with median (robust to outliers)
 
+**⚠️ Data Leakage Note**: In the EDA notebook, imputation uses the full dataset median for visualization. For production models, imputation is performed **after train-test split** using only training data statistics.
+
+### Constant Columns
+
+```
+Z_CostContact: 1 unique value (3)
+Z_Revenue:     1 unique value (11)
+```
+
+**Action**: Drop these columns — no predictive value with zero variance.
+
 ### Duplicate Records
 
 ```
@@ -76,6 +87,12 @@ Duplicate rows: 0
 ```
 
 Dataset is clean with no duplicate entries.
+
+### Data Validation
+
+- ✓ No negative values in spending columns
+- ✓ No negative values in purchase count columns
+- ✓ Age outliers identified (3 records with unrealistic ages)
 
 ### Data Types
 
@@ -183,6 +200,8 @@ Action: Consolidate rare categories (Alone, Absurd, YOLO → Other)
 
 ### Correlation Analysis
 
+**Method**: Spearman correlation is used throughout as it's more robust to non-normal distributions and outliers typical in this dataset.
+
 #### Top Positive Correlations
 
 | Feature Pair | Correlation |
@@ -278,7 +297,56 @@ Imbalance Ratio: 5.7:1
 
 ---
 
-## 6. Feature Engineering Opportunities
+## 6. Statistical Tests
+
+### Normality Tests (Shapiro-Wilk)
+
+| Feature | W Statistic | p-value | Conclusion |
+|---------|-------------|---------|------------|
+| Income | 0.651 | <0.001 | NOT Normal |
+| Age | 0.987 | <0.001 | NOT Normal |
+| TotalSpend | 0.894 | <0.001 | NOT Normal |
+| Recency | 0.953 | <0.001 | NOT Normal |
+
+**Implication**: Use non-parametric methods (Spearman correlation) and consider log transformations.
+
+### Chi-Square Tests (Categorical vs Response)
+
+| Feature | χ² | p-value | Conclusion |
+|---------|-----|---------|------------|
+| Education | 47.2 | <0.001 | SIGNIFICANT |
+| Marital_Status | 31.8 | <0.001 | SIGNIFICANT |
+| HasChildren | 89.6 | <0.001 | SIGNIFICANT |
+
+**Implication**: All categorical features have significant association with campaign response.
+
+### ANOVA (Numeric Features by Response)
+
+| Feature | F-statistic | p-value | Conclusion |
+|---------|-------------|---------|------------|
+| Income | 156.3 | <0.001 | SIGNIFICANT |
+| TotalSpend | 201.4 | <0.001 | SIGNIFICANT |
+| Recency | 45.7 | <0.001 | SIGNIFICANT |
+| Age | 12.3 | <0.001 | SIGNIFICANT |
+
+**Implication**: Responders significantly differ from non-responders across all numeric features.
+
+### Multicollinearity (VIF Analysis)
+
+| Feature | VIF | Status |
+|---------|-----|--------|
+| Income | 1.82 | OK |
+| Age | 1.15 | OK |
+| Recency | 1.03 | OK |
+| NumWebPurchases | 2.34 | OK |
+| NumCatalogPurchases | 2.89 | OK |
+| NumStorePurchases | 2.12 | OK |
+
+**Conclusion**: No severe multicollinearity (all VIF < 5). Features are safe to use together.
+
+---
+
+## 7. Feature Engineering Opportunities
 
 ### Derived Features Created
 
