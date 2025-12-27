@@ -186,7 +186,6 @@ def get_classification_models(include_slow: bool = False) -> Dict[str, Any]:
             random_state=RANDOM_STATE
         ),
         "AdaBoost": AdaBoostClassifier(
-            algorithm="SAMME",
             random_state=RANDOM_STATE,
             estimator=DecisionTreeClassifier(max_depth=4, random_state=RANDOM_STATE)
         ),
