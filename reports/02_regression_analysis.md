@@ -94,6 +94,12 @@ We carefully **excluded spending columns** from features to avoid data leakage:
 - Including them would give artificially perfect predictions
 - The model would learn "TotalSpend = sum of spending columns" (trivial)
 
+**Additional Leakage Prevention Measures**:
+1. **Train-Test Split BEFORE Preprocessing**: Data is split before any imputation or scaling
+2. **Deferred Imputation**: Missing `Income` values (24 rows) are imputed using training data median only
+3. **Pipeline-Based Transforms**: All preprocessing fitted on training data, applied to test data
+4. **No Target-Derived Features**: Features like `SpendingRatio` and `AvgSpendPerPurchase` are excluded
+
 ### Preprocessing Pipeline
 
 ```python

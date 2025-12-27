@@ -106,6 +106,21 @@ We include **all available features** including spending-related columns because
 - A customer's response to a campaign is not caused by their past spending
 - High spenders may be more engaged and thus more likely to respond
 
+### Why We Exclude `AcceptedCmp1-5`
+
+The dataset contains past campaign acceptance indicators (`AcceptedCmp1-5`). We **intentionally exclude** these for several reasons:
+
+1. **Temporal Data Leakage Risk**: In deployment, you may not have all past campaign responses when predicting a new campaign
+2. **Circular Reasoning**: Using "did they accept past campaigns?" to predict future acceptance is borderline tautological
+3. **Business Interpretability**: Marketing needs insights about *customer attributes* that predict response, not just "target past responders"
+4. **Model Generalization**: A model trained on `AcceptedCmp1-5` won't generalize to new customers without campaign history
+
+### Data Leakage Prevention
+
+- **Stratified Train-Test Split**: Preserves class ratios in both sets
+- **Deferred Imputation**: Missing Income values imputed using training data median only
+- **Pipeline-Based Preprocessing**: All transforms fitted on training data, applied to test data
+
 ---
 
 ## 4. Model Selection
