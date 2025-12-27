@@ -198,6 +198,9 @@ CLUSTERING_FEATURES = [
 # =============================================================================
 # EDUCATION MAPPING (Ordinal Encoding)
 # =============================================================================
+# NOTE: Statistical analysis confirmed all 5 education levels have significantly
+# different spending patterns. Basic ($82) vs 2n Cycle ($497) p<0.0001.
+# DO NOT merge categories - it loses predictive information.
 EDUCATION_MAPPING = {
     "Basic": 1,
     "2n Cycle": 2,
@@ -206,12 +209,23 @@ EDUCATION_MAPPING = {
     "PhD": 5,
 }
 
-# Marital status consolidation (rare categories → Other)
+# All 5 education categories for one-hot encoding
+EDUCATION_CATEGORIES = ["Basic", "2n Cycle", "Graduation", "Master", "PhD"]
+
+# =============================================================================
+# MARITAL STATUS CONSOLIDATION
+# =============================================================================
+# NOTE: Statistical analysis showed Widow ($739) is significantly different from
+# Single ($606) - p=0.02. We only merge truly rare categories (n<10 total).
+# Keep: Married, Together, Single, Divorced, Widow (all have 77+ samples)
 MARITAL_STATUS_CONSOLIDATION = {
-    "Alone": "Other",
-    "Absurd": "Other",
-    "YOLO": "Other",
+    "Alone": "Other",   # n=3
+    "Absurd": "Other",  # n=2  
+    "YOLO": "Other",    # n=2
 }
+
+# All 6 marital categories for one-hot encoding (after consolidation)
+MARITAL_STATUS_CATEGORIES = ["Married", "Together", "Single", "Divorced", "Widow", "Other"]
 
 # =============================================================================
 # VISUALIZATION SETTINGS

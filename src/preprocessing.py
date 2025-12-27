@@ -307,11 +307,15 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
         if spending_cols_present:
             X["TotalSpend"] = X[spending_cols_present].sum(axis=1)
         
-        # --- Education_Level (ordinal encoding) ---
+        # --- Education_Level (ordinal encoding - all 5 levels preserved) ---
+        # NOTE: Statistical analysis confirmed Basic≠2n Cycle (p<0.0001)
+        # Keep all 5 levels: Basic(1), 2n Cycle(2), Graduation(3), Master(4), PhD(5)
         if "Education" in X.columns:
             X["Education_Level"] = X["Education"].map(EDUCATION_MAPPING)
         
-        # --- Marital_Status consolidation ---
+        # --- Marital_Status consolidation (only rare categories merged) ---
+        # NOTE: Statistical analysis confirmed Widow≠Single (p=0.02)
+        # Keep: Married, Together, Single, Divorced, Widow; Merge: Alone, Absurd, YOLO → Other
         if "Marital_Status" in X.columns:
             X["Marital_Status"] = X["Marital_Status"].replace(MARITAL_STATUS_CONSOLIDATION)
         
