@@ -140,10 +140,11 @@ NUM_FEATURES_CAPPED = [
     "NumWebVisitsMonth",
 ]
 
-# Categorical features for modeling
+# Categorical features for modeling (KEEP ALL ORIGINAL CATEGORIES)
+# Statistical analysis showed: Basic ≠ 2n Cycle (p<0.0001), Widow ≠ Single (p=0.02)
 CAT_FEATURES = [
-    "Education_Level",      # Ordinal encoded: Basic=1 to PhD=5
-    "Marital_Status",       # Consolidated: rare categories → "Other"
+    "Education",            # All 5 levels: Basic, 2n Cycle, Graduation, Master, PhD
+    "Marital_Status",       # 6 categories after cleaning: Married, Together, Single, Divorced, Widow, Other
 ]
 
 # Binary features to include as categorical
