@@ -50,13 +50,15 @@ This project demonstrates a **complete machine learning workflow** for customer 
 - **Imbalanced classification** handling (15% positive class)
 - **Clustering optimization** achieving 272% improvement
 - **Deep learning** with TensorFlow/Keras
+- **Cold Start handling** for new customer predictions
 
 ### Business Questions Answered
 
-1. 💰 **How much will a customer spend?** → Regression models predict with 97% accuracy
+1. 💰 **How much will a customer spend?** → Regression models predict with 97% accuracy (existing) / 78% (new customers)
 2. 📧 **Will they respond to campaigns?** → Classification identifies 85% of responders
 3. 👥 **What customer segments exist?** → 4 distinct, actionable segments identified
 4. 🧠 **Can deep learning help?** → Competitive but tree models win on small data
+5. 🆕 **What about NEW customers?** → Demographics-only model achieves R² = 0.78
 
 ## 📁 Project Structure
 
@@ -64,7 +66,8 @@ This project demonstrates a **complete machine learning workflow** for customer 
 customer-analytics-ml-pipeline/
 ├── 📓 Notebooks
 │   ├── 01_eda.ipynb                    # Exploratory Data Analysis
-│   ├── 02_regression.ipynb             # Spending Prediction (R²=0.97)
+│   ├── 02_regression.ipynb             # Spending Prediction (R²=0.97) - Existing Customers
+│   ├── 02b_regression_new_customers.ipynb  # Cold Start Model (R²=0.78) - New Customers
 │   ├── 03_classification.ipynb         # Response Prediction (AUC=0.875)
 │   ├── 04_clustering.ipynb             # Customer Segmentation (Sil=0.614)
 │   └── 05_deep_learning.ipynb          # Neural Networks

@@ -14,6 +14,8 @@ This report documents the development of a **regression model** to predict custo
 | **Test MAE** | $56.32 |
 | **Cross-Validation R²** | 0.9678 ± 0.0076 |
 
+> ⚠️ **Important Note**: This model uses purchase history features (NumCatalogPurchases, NumWebPurchases, etc.) which are highly correlated with TotalSpend. This is appropriate for **existing customers** with behavioral data. For **new customers** without purchase history, see `02b_regression_new_customers.ipynb` which achieves R² = 0.78 using demographics only.
+
 ---
 
 ## 1. Problem Definition
