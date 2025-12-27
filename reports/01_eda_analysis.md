@@ -1,5 +1,13 @@
 # 📊 Exploratory Data Analysis: Marketing Campaign Dataset
 
+---
+
+**Notebook**: `01_eda.ipynb`  
+**Version**: 1.0  
+**Last Updated**: December 2024
+
+---
+
 ## Executive Summary
 
 This report documents the **Exploratory Data Analysis (EDA)** performed on the marketing campaign dataset. The goal is to understand customer characteristics, identify data quality issues, and discover patterns that inform downstream modeling.

@@ -366,3 +366,70 @@ ENGINEERED_CATEGORICAL = [
     "Education_Num",
     "RecencyCategory",
 ]
+
+
+# =============================================================================
+# CONFIGURATION VALIDATION
+# =============================================================================
+def validate_config() -> None:
+    """
+    Validate configuration settings at runtime.
+    
+    Raises
+    ------
+    ValueError
+        If any configuration value is invalid.
+    
+    Example
+    -------
+    >>> from src.config import validate_config
+    >>> validate_config()  # Raises if config is invalid
+    """
+    errors = []
+    
+    # Validate numeric ranges
+    if not (0 < TEST_SIZE < 1):
+        errors.append(f"TEST_SIZE must be between 0 and 1, got {TEST_SIZE}")
+    
+    if CV_FOLDS < 2:
+        errors.append(f"CV_FOLDS must be at least 2, got {CV_FOLDS}")
+    
+    if RANDOM_STATE < 0:
+        errors.append(f"RANDOM_STATE must be non-negative, got {RANDOM_STATE}")
+    
+    if ANOMALY_CONTAMINATION <= 0 or ANOMALY_CONTAMINATION >= 1:
+        errors.append(f"ANOMALY_CONTAMINATION must be in (0, 1), got {ANOMALY_CONTAMINATION}")
+    
+    if IQR_MULTIPLIER <= 0:
+        errors.append(f"IQR_MULTIPLIER must be positive, got {IQR_MULTIPLIER}")
+    
+    # Validate feature lists are not empty
+    if not RAW_NUMERIC_FEATURES:
+        errors.append("RAW_NUMERIC_FEATURES cannot be empty")
+    
+    if not SPENDING_COLUMNS:
+        errors.append("SPENDING_COLUMNS cannot be empty")
+    
+    # Validate color codes (basic hex validation)
+    import re
+    hex_pattern = re.compile(r'^#[0-9A-Fa-f]{6}$')
+    for color_name, color_value in [
+        ("MAIN_COLOR", MAIN_COLOR),
+        ("SECONDARY_COLOR", SECONDARY_COLOR),
+        ("ACCENT_COLOR", ACCENT_COLOR),
+    ]:
+        if not hex_pattern.match(color_value):
+            errors.append(f"{color_name} must be a valid hex color, got {color_value}")
+    
+    # Raise all errors at once
+    if errors:
+        raise ValueError("Configuration validation failed:\n  - " + "\n  - ".join(errors))
+
+
+# Run validation on import (can be disabled for testing)
+if __name__ != "__test__":
+    try:
+        validate_config()
+    except ValueError as e:
+        import warnings
+        warnings.warn(f"Configuration validation warning: {e}", UserWarning)

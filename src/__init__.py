@@ -7,6 +7,7 @@ from . import evaluation
 from . import visualization
 from . import models
 from . import data_loader
+from . import logging_config
 
 __version__ = "1.0.0"
-__author__ = "Nazila Fazeli"
+__author__ = "Negin Kafee"

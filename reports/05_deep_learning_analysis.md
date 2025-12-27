@@ -1,9 +1,12 @@
-# Deep Learning Analysis Report
+# 🧠 Deep Learning Analysis Report
 ## Neural Network Models for Customer Analytics
 
-**Generated from**: `05_deep_learning.ipynb`  
-**Date**: Auto-generated  
-**Framework**: TensorFlow 2.20.0 / Keras
+---
+
+**Notebook**: `05_deep_learning.ipynb`  
+**Version**: 1.0  
+**Last Updated**: December 2024  
+**Framework**: TensorFlow 2.x / Keras
 
 ---
 

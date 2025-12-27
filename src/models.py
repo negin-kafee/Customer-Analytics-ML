@@ -86,7 +86,10 @@ def get_regression_models(include_slow: bool = False) -> Dict[str, Any]:
         "Decision Tree": DecisionTreeRegressor(random_state=RANDOM_STATE),
         "Random Forest": RandomForestRegressor(random_state=RANDOM_STATE, n_jobs=-1),
         "Gradient Boosting": GradientBoostingRegressor(random_state=RANDOM_STATE),
-        "AdaBoost": AdaBoostRegressor(random_state=RANDOM_STATE),
+        "AdaBoost": AdaBoostRegressor(
+            random_state=RANDOM_STATE,
+            estimator=DecisionTreeRegressor(max_depth=4, random_state=RANDOM_STATE)
+        ),
         "KNN": KNeighborsRegressor(n_jobs=-1),
     }
     
@@ -183,7 +186,9 @@ def get_classification_models(include_slow: bool = False) -> Dict[str, Any]:
             random_state=RANDOM_STATE
         ),
         "AdaBoost": AdaBoostClassifier(
-            random_state=RANDOM_STATE
+            algorithm="SAMME",
+            random_state=RANDOM_STATE,
+            estimator=DecisionTreeClassifier(max_depth=4, random_state=RANDOM_STATE)
         ),
         "KNN": KNeighborsClassifier(n_jobs=-1),
     }
@@ -193,7 +198,6 @@ def get_classification_models(include_slow: bool = False) -> Dict[str, Any]:
             random_state=RANDOM_STATE,
             n_jobs=-1,
             verbosity=0,
-            use_label_encoder=False,
             eval_metric="logloss",
             scale_pos_weight=6  # Approximate ratio for imbalanced data
         )

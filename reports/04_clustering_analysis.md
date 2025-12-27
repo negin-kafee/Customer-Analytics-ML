@@ -1,5 +1,13 @@
 # 🎯 Customer Segmentation Analysis Report
 
+---
+
+**Notebook**: `04_clustering.ipynb`  
+**Version**: 1.0  
+**Last Updated**: December 2024
+
+---
+
 ## Executive Summary
 
 This report documents the **customer segmentation analysis** using unsupervised machine learning. We identified **4 distinct customer segments** that enable targeted marketing strategies. Through extensive optimization, we improved the clustering quality by **+272%**.

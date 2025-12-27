@@ -1,5 +1,13 @@
 # 💰 Regression Analysis: Predicting Customer Spending
 
+---
+
+**Notebook**: `02_regression.ipynb`  
+**Version**: 1.0  
+**Last Updated**: December 2024
+
+---
+
 ## Executive Summary
 
 This report documents the development of a **regression model** to predict customer total spending (`TotalSpend`). The goal is to identify high-value customers and understand what drives purchasing behavior.

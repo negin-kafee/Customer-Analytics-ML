@@ -1,5 +1,13 @@
 # 🎯 Classification Analysis: Predicting Marketing Campaign Response
 
+---
+
+**Notebook**: `03_classification.ipynb`  
+**Version**: 1.0  
+**Last Updated**: December 2024
+
+---
+
 ## Executive Summary
 
 This report documents the development of a **binary classification model** to predict customer response to marketing campaigns. The goal is to optimize marketing spend by targeting customers most likely to respond.

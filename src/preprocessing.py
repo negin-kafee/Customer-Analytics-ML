@@ -276,9 +276,16 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
             self.reference_date_ = dates.max()
             self.reference_year_ = dates.dt.year.max()
         else:
-            # Default fallback
-            self.reference_date_ = pd.Timestamp("2014-12-31")
-            self.reference_year_ = 2014
+            # Dynamic fallback: use current date if Dt_Customer not available
+            # This avoids hardcoded dates that become stale
+            import warnings
+            warnings.warn(
+                "Dt_Customer column not found. Using current date as reference. "
+                "This may affect Age and Tenure calculations.",
+                UserWarning
+            )
+            self.reference_date_ = pd.Timestamp.now()
+            self.reference_year_ = self.reference_date_.year
         
         return self
     
