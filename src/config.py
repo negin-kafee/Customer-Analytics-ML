@@ -321,14 +321,11 @@ CAMPAIGN_COLS = [
     "AcceptedCmp3",
     "AcceptedCmp4",
     "AcceptedCmp5",
-    "Response",
 ]
 
 # =============================================================================
-# DATA LEAKAGE WARNING - FEATURES TO EXCLUDE
+# FEATURES TO EXCLUDE FROM CLASSIFICATION
 # =============================================================================
-# These features have data leakage for classification (Response prediction)
-# They are derived from or perfectly correlated with campaign responses
 LEAKY_FEATURES = [
     "TotalAccepted",
     "IsPreviousResponder",
