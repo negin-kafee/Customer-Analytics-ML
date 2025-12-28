@@ -12,7 +12,7 @@ This directory contains the original, unmodified datasets for the Customer Analy
 
 - **Records**: 2,240 customers
 - **Features**: 29 variables
-- **Format**: Tab-separated values (TSV)
+- **Format**: Comma-separated values (CSV)
 - **Size**: ~220KB
 
 ### Key Features

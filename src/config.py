@@ -30,7 +30,7 @@ CV_FOLDS = 5       # 5-fold cross-validation balances bias/variance tradeoff
 # DATA PATHS
 # =============================================================================
 DATA_PATH = "data/raw/marketing_campaign.csv"
-DATA_SEPARATOR = "\t"  # Tab-separated values
+DATA_SEPARATOR = ","  # Comma-separated values
 MODELS_DIR = "models/"
 PROCESSED_DATA_DIR = "data/processed/"
 

@@ -30,6 +30,7 @@ from sklearn.model_selection import train_test_split
 
 from .config import (
     DATA_PATH,
+    DATA_SEPARATOR,
     RANDOM_STATE,
     TEST_SIZE,
     TARGET_REGRESSION,
@@ -73,8 +74,8 @@ def load_data(filepath: Optional[str] = None, verbose: bool = True) -> pd.DataFr
             f"Expected path: {DATA_PATH}"
         )
     
-    # Load with tab separator (marketing_campaign.csv format)
-    df = pd.read_csv(filepath, sep="\t")
+    # Load with configured separator
+    df = pd.read_csv(filepath, sep=DATA_SEPARATOR)
     
     if verbose:
         print(f"✓ Loaded data from: {filepath}")
