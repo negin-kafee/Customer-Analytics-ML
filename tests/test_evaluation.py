@@ -204,7 +204,9 @@ class TestEvaluateClassification:
         """Test that evaluate_classification returns a dictionary."""
         result = evaluate_classification(
             classification_data['model'],
+            classification_data['X_train'],
             classification_data['X_test'],
+            classification_data['y_train'],
             classification_data['y_test']
         )
         
@@ -214,11 +216,13 @@ class TestEvaluateClassification:
         """Test that result contains expected metrics."""
         result = evaluate_classification(
             classification_data['model'],
+            classification_data['X_train'],
             classification_data['X_test'],
+            classification_data['y_train'],
             classification_data['y_test']
         )
         
-        expected = ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']
+        expected = ['accuracy_test', 'precision_test', 'recall_test', 'f1_test', 'roc_auc_test']
         for metric in expected:
             assert metric in result, f"Missing metric: {metric}"
     
@@ -226,7 +230,9 @@ class TestEvaluateClassification:
         """Test that metrics are in valid range [0, 1]."""
         result = evaluate_classification(
             classification_data['model'],
+            classification_data['X_train'],
             classification_data['X_test'],
+            classification_data['y_train'],
             classification_data['y_test']
         )
         
