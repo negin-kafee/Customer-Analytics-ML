@@ -27,13 +27,13 @@ help:  ## Show this help message
 install:  ## Install production dependencies
 	@echo "$(BLUE)Installing dependencies...$(NC)"
 	$(PYTHON) -m pip install --upgrade pip
-	$(PYTHON) -m pip install -r requirements.txt
+	$(PYTHON) -m pip install -e .
 	@echo "$(GREEN)✓ Installation complete$(NC)"
 
 install-dev:  ## Install development dependencies
 	@echo "$(BLUE)Installing development dependencies...$(NC)"
 	$(PYTHON) -m pip install --upgrade pip
-	$(PYTHON) -m pip install -r requirements.txt
+	$(PYTHON) -m pip install -e .
 	$(PYTHON) -m pip install pytest pytest-cov black isort flake8 mypy
 	@echo "$(GREEN)✓ Development installation complete$(NC)"
 
@@ -41,7 +41,7 @@ setup:  ## Setup virtual environment and install all dependencies
 	@echo "$(BLUE)Setting up virtual environment...$(NC)"
 	$(PYTHON) -m venv $(VENV)
 	$(VENV_BIN)/pip install --upgrade pip
-	$(VENV_BIN)/pip install -r requirements.txt
+	$(VENV_BIN)/pip install -e .
 	$(VENV_BIN)/pip install pytest pytest-cov black isort flake8
 	@echo "$(GREEN)✓ Virtual environment created at $(VENV)$(NC)"
 	@echo "$(YELLOW)Activate with: source $(VENV)/bin/activate$(NC)"
@@ -91,7 +91,7 @@ clean-models:  ## Remove generated model files
 
 run-eda:  ## Run EDA notebook (requires Jupyter)
 	@echo "$(BLUE)Running EDA notebook...$(NC)"
-	$(PYTHON) -m jupyter nbconvert --to notebook --execute 01_eda.ipynb --output 01_eda_executed.ipynb
+	$(PYTHON) -m jupyter nbconvert --to notebook --execute notebooks/01_eda.ipynb --output notebooks/01_eda_executed.ipynb
 
 validate-data:  ## Validate that data file exists and is readable
 	@echo "$(BLUE)Validating data...$(NC)"

@@ -100,7 +100,7 @@ echo -e "${GREEN}✓ pip upgraded${NC}"
 # Install dependencies
 echo ""
 echo -e "${YELLOW}Installing dependencies...${NC}"
-python3 -m pip install -r requirements.txt --quiet
+python3 -m pip install -e . --quiet
 echo -e "${GREEN}✓ Dependencies installed${NC}"
 
 # Install development dependencies
@@ -137,10 +137,10 @@ print('  ✓ Evaluation module loaded')
 
 # Check data file
 echo -e "${YELLOW}Checking data file...${NC}"
-if [ -f "Data/marketing_campaign.csv" ]; then
+if [ -f "data/raw/marketing_campaign.csv" ]; then
     echo -e "${GREEN}✓ Data file found${NC}"
 else
-    echo -e "${YELLOW}⚠ Data file not found at Data/marketing_campaign.csv${NC}"
+    echo -e "${YELLOW}⚠ Data file not found at data/raw/marketing_campaign.csv${NC}"
     echo -e "${YELLOW}  Please ensure the dataset is in place before running notebooks.${NC}"
 fi
 

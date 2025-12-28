@@ -2,6 +2,7 @@
 .venv/
 venv/
 env/
+ENV/
 
 # Python cache
 __pycache__/
@@ -43,3 +44,12 @@ coverage.xml
 dist/
 build/
 *.egg-info/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Development
+.tox/
+.nox/
