@@ -236,7 +236,7 @@ jupyter notebook
 
 **Key Features**:
 - **No behavioral leakage** - segments based on spending activity, not response history
-- Campaign exposure feature (`EligibleCampaigns`) for timing analysis
+- **Campaign timing discovery**: All campaigns ran after June 2014 (EligibleCampaigns = 5 for all)
 - Segment-specific feature engineering
 - Production deployment pipeline with automated routing
 - Cold start handling for brand new customers
