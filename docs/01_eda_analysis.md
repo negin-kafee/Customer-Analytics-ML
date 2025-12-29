@@ -348,6 +348,133 @@ Imbalance Ratio: 5.7:1
 
 ## 7. Feature Engineering Opportunities
 
+# Feature Engineering (EDA Phase)
+
+During the Exploratory Data Analysis (EDA) phase, we engineered a set of derived features to transform raw transactional and demographic variables into meaningful behavioral signals. The goal was to reduce dimensionality, normalize information across customers, and create interpretable features aligned with spending behavior, household context, engagement, and customer lifecycle.
+
+These features were created **for exploratory understanding and hypothesis generation**. In the modeling phase, all transformations are re-implemented inside proper preprocessing pipelines to avoid data leakage.
+
+---
+
+### 1. Spending Features
+
+Raw spending variables were aggregated and normalized to capture both total value and product preferences.
+
+**Base variables**
+- `MntWines`, `MntFruits`, `MntMeatProducts`
+- `MntFishProducts`, `MntSweetProducts`, `MntGoldProds`
+
+**Engineered features**
+
+| Feature | Formula | Purpose |
+|---------|---------|---------|
+| **TotalSpend** | Sum of all product spending categories | Represents overall monetary value of the customer |
+| **TotalSpend_log** | Log-transformed total spending (`log(1 + TotalSpend)`) | Reduces skewness and stabilizes variance for regression modeling |
+| **SpendingRatio** | Ratio of total spending to income | Indicates consumption intensity and spending aggressiveness |
+
+---
+
+### 2. Family and Normalization Features
+
+Household-aware normalization was applied to account for differences in family size.
+
+**Engineered features**
+
+| Feature | Formula | Purpose |
+|---------|---------|---------|
+| **FamilySize** | Computed as `1 + Kidhome + Teenhome` | Total household members for normalization |
+| **IncomePerCapita** | Income normalized by family size | More informative than raw income when comparing households |
+| **HasChildren** | `(Kidhome + Teenhome) > 0` | Binary indicator of presence of children |
+| **TotalChildren** | `Kidhome + Teenhome` | Total number of dependents |
+
+---
+
+### 3. Engagement and Purchase Behavior Features
+
+Customer interaction behavior was summarized across channels to capture engagement patterns.
+
+**Base variables**
+- `NumWebPurchases`, `NumStorePurchases`, `NumCatalogPurchases`, `NumDealsPurchases`
+- `NumWebVisitsMonth`, `Recency`
+
+**Engineered features**
+
+| Feature | Formula | Purpose |
+|---------|---------|---------|
+| **TotalPurchases** | Total number of purchases across all channels | Overall purchase frequency |
+| **AvgSpendPerPurchase** | `TotalSpend / TotalPurchases` | Indicates average transaction value |
+| **WebPurchaseRatio** | `NumWebPurchases / TotalPurchases` | Digital vs offline preference |
+
+---
+
+### 4. Customer Lifecycle and Temporal Features
+
+These features capture temporal and demographic aspects of the customer journey.
+
+**Engineered features**
+
+| Feature | Formula | Purpose |
+|---------|---------|---------|
+| **Age** | `2024 - Year_Birth` | More interpretable than birth year |
+| **Tenure_Days** | Days since customer enrollment | Customer relationship length |
+| **Tenure_Months** | `Tenure_Days // 30` | Tenure in more interpretable units |
+
+---
+
+### 5. Campaign Response and Segmentation Features
+
+Campaign engagement history was aggregated to understand customer responsiveness patterns.
+
+**Base variables**
+- `AcceptedCmp1`, `AcceptedCmp2`, `AcceptedCmp3`, `AcceptedCmp4`, `AcceptedCmp5`
+
+**Engineered features**
+
+| Feature | Formula | Purpose |
+|---------|---------|---------|
+| **TotalAccepted** | Sum of all campaign acceptances | Overall campaign responsiveness |
+| **IsPreviousResponder** | `TotalAccepted > 0` | Binary indicator of any past response |
+| **HasHistory** | `Tenure_Days > median` | Long-term vs newer customer classification |
+
+---
+
+### 6. Education and Demographic Encoding
+
+Categorical variables were encoded to preserve ordinality and business meaning.
+
+**Engineered features**
+
+| Feature | Mapping | Purpose |
+|---------|---------|---------|
+| **Education_Num** | Basic=1, 2n Cycle=2, Graduation=3, Master=4, PhD=5 | Ordinal encoding preserving education hierarchy |
+| **Marital_Status_Clean** | Rare categories → "Other" | Consolidation of low-frequency categories |
+| **IsPartner** | Married/Together = 1, Others = 0 | Binary partnership indicator |
+
+---
+
+### 7. Outlier Treatment (EDA Only)
+
+Outliers were identified using IQR-based methods and visual inspection.
+
+- Extreme values were **capped, not removed**, to preserve high-value customers
+- Capping thresholds computed during EDA are **not reused directly** in modeling
+- All outlier handling is re-applied inside training pipelines using training data only
+
+---
+
+### 8. Missing Data Handling
+
+- Only the `Income` variable contained missing values (~1%)
+- Missingness was assessed and assumed **MCAR (Missing Completely At Random)**
+- Median imputation was used during EDA for exploration
+- Final imputation is performed inside preprocessing pipelines after train–test split
+
+---
+
+### Notes on Data Leakage Prevention
+
+EDA was conducted on the full dataset to understand distributions and relationships. All feature transformations identified here are re-implemented during modeling using training-only statistics to prevent information leakage.
+
 ### Derived Features Created
 
 | Feature | Formula | Purpose |
