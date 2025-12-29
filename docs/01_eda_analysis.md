@@ -421,9 +421,9 @@ These features capture temporal and demographic aspects of the customer journey.
 
 ---
 
-### 5. Campaign Response and Segmentation Features
+### 5. Campaign Response Features (Basic EDA)
 
-Campaign engagement history was aggregated to understand customer responsiveness patterns.
+Campaign engagement history was aggregated to understand customer responsiveness patterns during exploratory analysis.
 
 **Base variables**
 - `AcceptedCmp1`, `AcceptedCmp2`, `AcceptedCmp3`, `AcceptedCmp4`, `AcceptedCmp5`
@@ -434,7 +434,8 @@ Campaign engagement history was aggregated to understand customer responsiveness
 |---------|---------|---------|
 | **TotalAccepted** | Sum of all campaign acceptances | Overall campaign responsiveness |
 | **IsPreviousResponder** | `TotalAccepted > 0` | Binary indicator of any past response |
-| **HasHistory** | `Tenure_Days > median` | Long-term vs newer customer classification |
+
+**Note**: Advanced segmentation features (`HasHistory`, `OpportunityRate`, `EligibleCampaigns`) were developed later during the classification modeling phase, not during EDA.
 
 ---
 
