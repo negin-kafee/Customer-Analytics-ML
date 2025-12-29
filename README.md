@@ -13,9 +13,10 @@
 ## 🎯 Key Results
 
 | Task | Best Model | Performance | Business Impact |
-|------|------------|-------------|-----------------|
+|------|------------|-------------|------------------|
 | **Spending Prediction** | Random Forest | R² = **0.970** | Predict 97% of spending variance |
-| **Campaign Response** | Random Forest | ROC-AUC = **0.875** | Identify 85%+ of responders |
+| **Campaign Response (Unified)** | Random Forest | ROC-AUC = **0.875** | Identify 85%+ of responders |
+| **Campaign Response (Segmented)** | 4 Specialized Models | Up to **0.860 AUC** | Targeted strategies per customer type |
 | **Customer Segmentation** | K-Means (Optimized) | Silhouette = **0.614** | 4 actionable segments |
 | **Deep Learning** | MLP | R² = 0.953 / AUC = 0.871 | Competitive with tree models |
 
@@ -55,10 +56,11 @@ This project demonstrates a **complete machine learning workflow** for customer 
 ### Business Questions Answered
 
 1. 💰 **How much will a customer spend?** → Regression models predict with 97% accuracy (existing) / 78% (new customers)
-2. 📧 **Will they respond to campaigns?** → Classification identifies 85% of responders
-3. 👥 **What customer segments exist?** → 4 distinct, actionable segments identified
-4. 🧠 **Can deep learning help?** → Competitive but tree models win on small data
-5. 🆕 **What about NEW customers?** → Demographics-only model achieves R² = 0.78
+2. 📧 **Will they respond to campaigns?** → Unified classification identifies 85% of responders
+3. 🎯 **How to target different customer types?** → Segmented models achieve 86% AUC for high-value segments
+4. 👥 **What customer segments exist?** → 4 distinct, actionable segments identified
+5. 🧠 **Can deep learning help?** → Competitive but tree models win on small data
+6. 🆕 **What about NEW customers?** → Demographics-only model achieves R² = 0.78
 
 ## 📁 Project Structure
 
@@ -68,7 +70,8 @@ customer-analytics-ml/
 │   ├── 01_eda.ipynb                   # Exploratory Data Analysis
 │   ├── 02_regression.ipynb            # Spending Prediction (R²=0.97) - Existing Customers
 │   ├── 02b_regression_new_customers.ipynb  # Cold Start Model (R²=0.78) - New Customers
-│   ├── 03_classification.ipynb        # Response Prediction (AUC=0.875)
+│   ├── 03_classification.ipynb        # Response Prediction (AUC=0.875) - Unified Model
+│   ├── 03b_classification_segmented.ipynb  # Advanced Segmented Models (AUC=0.860)
 │   ├── 04_clustering.ipynb            # Customer Segmentation (Sil=0.614)
 │   ├── 05_deep_learning.ipynb         # Neural Networks
 │   └── README.md                      # Notebook execution guide
@@ -212,9 +215,30 @@ jupyter notebook
 
 **Techniques**:
 - Class weight balancing
-- SMOTE oversampling
+- SMOTE oversampling  
 - Threshold optimization (cost-sensitive)
 - Precision-Recall trade-off analysis
+
+**Best Result**: Random Forest with **ROC-AUC = 0.875**
+
+### 3️⃣b Advanced Segmented Classification (`03b_classification_segmented.ipynb`)
+**Goal**: Specialized models for different customer types
+
+**Innovation**: 4-segment approach based on customer tenure and campaign history:
+
+| Segment | Definition | Model Performance | Business Strategy |
+|---------|------------|-------------------|-------------------|
+| **Newer_NonResponder** | New customers, never responded | AUC = 0.576 | Low-cost targeting |
+| **Newer_Responder** | New customers, has responded | **AUC = 0.834** | Loyalty building |
+| **Established_NonResponder** | Long-term, never responded | **AUC = 0.824** | Re-engagement |
+| **Established_Responder** | Long-term, previous responder | **AUC = 0.860** | Premium targeting |
+
+**Key Features**:
+- Campaign timing analysis (`EligibleCampaigns`, `OpportunityRate`)
+- Segment-specific feature engineering
+- Safe use of campaign history within segments
+- Production deployment pipeline with automated routing
+- Business impact analysis: $138K revenue potential from top segment
 
 **Best Result**: Random Forest with **ROC-AUC = 0.875**, Recall = 78%
 
