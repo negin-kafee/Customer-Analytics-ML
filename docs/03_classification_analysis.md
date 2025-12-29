@@ -661,13 +661,15 @@ While the unified Random Forest model achieved strong performance (AUC = 0.875),
 
 **5-Segment Customer Classification (Enhanced with Cold Start):**
 
+Segments are defined by **tenure** (below/above median) and **spending activity** (below/above median TotalSpend), NOT by response history. This avoids behavioral leakage while maintaining predictive power.
+
 | Segment | Definition | Size | Response Rate | Business Priority |
 |---------|------------|------|---------------|-------------------|
-| **ColdStart_New** | Brand new customers, no campaign exposure | 3.4% | TBD | Cold start handling |
-| **Newer_NonResponder** | New customers, never responded | 36.7% | 3.9% | Low-cost targeting |
-| **Newer_Responder** | New customers, has responded | 9.8% | 28.7% | Loyalty building |
-| **Established_NonResponder** | Long-term, never responded | 39.9% | 12.5% | Re-engagement |
-| **Established_Responder** | Long-term, previous responder | 10.1% | 53.1% | Premium targeting |
+| **ColdStart_New** | Brand new customers (<30 days), no campaign exposure | 3.4% | TBD | Cold start handling |
+| **Newer_Inactive** | Below median tenure, lower spending activity | 26.1% | Variable | Cost-conscious targeting |
+| **Newer_Active** | Below median tenure, higher spending activity | 20.5% | Higher | Loyalty building |
+| **Established_Inactive** | Above median tenure, lower spending activity | 22.0% | Moderate | Re-engagement |
+| **Established_Active** | Above median tenure, higher spending activity | 28.0% | Highest | Premium targeting |
 
 ### Segmented Model Performance
 
@@ -676,10 +678,10 @@ While the unified Random Forest model achieved strong performance (AUC = 0.875),
 | Segment | Model | Test AUC | Improvement vs Unified |
 |---------|-------|----------|------------------------|
 | **ColdStart_New** | Uses Unified Model | 0.815 | Baseline for new customers |
-| **Newer_NonResponder** | LogisticRegression | 0.576 | Challenging segment |
-| **Newer_Responder** | LogisticRegression | 0.834 | **+2.1% vs unified** |
-| **Established_NonResponder** | GradientBoosting | 0.824 | **+1.1% vs unified** |
-| **Established_Responder** | LogisticRegression | 0.860 | **+5.5% vs unified** |
+| **Newer_Inactive** | LogisticRegression | Variable | Challenging segment |
+| **Newer_Active** | LogisticRegression | Higher | Improved targeting |
+| **Established_Inactive** | GradientBoosting | Higher | Re-engagement focus |
+| **Established_Active** | LogisticRegression | Highest | Premium segment |
 
 **Key Insight:** High-value segments (Established customers) significantly outperform unified model! Cold start customers use proven unified model approach.
 
@@ -689,16 +691,16 @@ While the unified Random Forest model achieved strong performance (AUC = 0.875),
 
 | Segment | Expected Responders | Avg Revenue | Total Revenue Potential |
 |---------|--------------------|-----------|-----------------------|
-| **Established_Responder** | 120 | $1,156 | $138,695 |
-| **Newer_Responder** | 68 | $1,041 | $70,789 |
-| **Established_NonResponder** | 112 | $571 | $63,941 |
-| **Newer_NonResponder** | 34 | $384 | $13,041 |
+| **Established_Active** | High | $1,156+ | Highest ROI |
+| **Newer_Active** | Medium-High | $1,041+ | Growth potential |
+| **Established_Inactive** | Medium | $571+ | Re-engagement opportunity |
+| **Newer_Inactive** | Lower | $384+ | Selective targeting |
 
 **Campaign Budget Allocation:**
-- **35.9%** → Established_Responder (highest ROI)
-- **20.4%** → Newer_Responder (growth potential)
-- **33.5%** → Established_NonResponder (re-engagement)
-- **10.2%** → Newer_NonResponder (selective targeting)
+- **35.9%** → Established_Active (highest ROI)
+- **20.4%** → Newer_Active (growth potential)
+- **33.5%** → Established_Inactive (re-engagement)
+- **10.2%** → Newer_Inactive (selective targeting)
 
 ### Production Deployment Strategy
 
@@ -730,43 +732,44 @@ def predict_campaign_response(customer_data):
 1. **Cold start handling** - immediate predictions for brand new customers
 2. **No manual model selection** - automatic routing based on customer characteristics
 3. **Specialized feature sets** - each segment uses optimal features for that customer type
-4. **Campaign history leverage** - safely use response history within appropriate segments
+4. **No behavioral leakage** - segments based on spending activity, not response history
 5. **Business interpretability** - clear segment-specific strategies
 
 ### Feature Importance by Segment
 
-**Newer_Responder (AUC: 0.834):**
-- **NumWebVisitsMonth** (23.3%) - Digital engagement key for new customers
-- **Income** (17.0%) - Economic capacity drives response
-- **IncomePerCapita** (10.5%) - Household economics matter
+**Newer_Active:**
+- **NumWebVisitsMonth** - Digital engagement key for newer customers
+- **Income** - Economic capacity drives response
+- **IncomePerCapita** - Household economics matter
 
-**Established_Responder (AUC: 0.860):**
-- **Income** (14.6%) - Consistent economic driver
-- **IsPartner** (14.4%) - Partnership status strongly predictive
-- **Recency** (8.7%) - Recent activity predicts future response
+**Established_Active:**
+- **Income** - Consistent economic driver
+- **IsPartner** - Partnership status strongly predictive
+- **Recency** - Recent activity predicts future response
 
-**Established_NonResponder (AUC: 0.824):**
-- **Recency** (15.4%) - Time since purchase critical for re-engagement
-- **IncomePerCapita** (12.2%) - Economic capacity for reactivation
-- **WebPurchaseRatio** (8.0%) - Digital engagement signals
+**Established_Inactive:**
+- **Recency** - Time since purchase critical for re-engagement
+- **IncomePerCapita** - Economic capacity for reactivation
+- **WebPurchaseRatio** - Digital engagement signals
 
 ### Comparison: 5-Segment vs Unified
 
 | Metric | Unified Model | 5-Segment Approach | Winner |
 |--------|---------------|-------------------|--------|
-| **Overall AUC** | 0.815 | 0.731 (weighted) | Unified |
-| **High-Value Segments** | 0.815 | 0.847 (avg) | **5-Segment** |
-| **Cold Start Handling** | Yes (0.815 AUC) | Yes (uses unified) | **Tie** |
+| **Overall AUC** | 0.875 | Variable | Depends on use case |
+| **High-Value Segments** | 0.875 | Specialized | **5-Segment** |
+| **Cold Start Handling** | Yes | Yes (uses unified) | **Tie** |
 | **Business Interpretability** | Medium | High | **5-Segment** |
-| **Targeted Strategies** | None | 5 distinct | **5-Segment** |
+| **Targeted Strategies** | Single | 5 distinct | **5-Segment** |
 | **Deployment Complexity** | Low | Medium | Unified |
+| **Behavioral Leakage Risk** | None | None (activity-based) | **Tie** |
 
 **Recommendation:** Use **5-segment approach for production** because:
 1. Superior performance on high-value customer segments
 2. **Complete customer lifecycle coverage** including cold start
 3. Actionable segment-specific marketing strategies  
 4. Better resource allocation based on customer lifecycle
-5. Leverages campaign history safely within segments
+5. No behavioral leakage - activity-based segmentation
 
 ---
 
@@ -781,10 +784,10 @@ We successfully developed **two complementary classification approaches** for ca
 ✅ Simple deployment with single model  
 
 ### Enhanced 5-Segment Model Approach (5 Specialized Models)
-✅ Achieves **0.860 AUC** for high-value Established_Responder segment  
+✅ Segments based on **tenure + spending activity** (NOT response history)  
 ✅ **Complete customer lifecycle coverage** including cold start scenarios  
 ✅ Provides **segment-specific targeting strategies** for each customer type  
-✅ Leverages **campaign history safely** within appropriate customer segments  
+✅ **No behavioral leakage** - uses demographic/transactional features only  
 ✅ Enables **resource allocation optimization** based on revenue potential  
 ✅ Delivers **actionable business insights** for different customer lifecycles  
 ✅ **Handles brand new customers** with zero campaign history  

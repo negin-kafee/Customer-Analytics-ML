@@ -16,7 +16,7 @@
 |------|------------|-------------|------------------|
 | **Spending Prediction** | Random Forest | R² = **0.970** | Predict 97% of spending variance |
 | **Campaign Response (Unified)** | Random Forest | ROC-AUC = **0.875** | Identify 85%+ of responders |
-| **Campaign Response (Segmented)** | 4 Specialized Models | Up to **0.860 AUC** | Targeted strategies per customer type |
+| **Campaign Response (Segmented)** | 5 Specialized Models | Activity-based segments | Targeted strategies per customer type |
 | **Customer Segmentation** | K-Means (Optimized) | Silhouette = **0.614** | 4 actionable segments |
 | **Deep Learning** | MLP | R² = 0.953 / AUC = 0.871 | Competitive with tree models |
 
@@ -57,7 +57,7 @@ This project demonstrates a **complete machine learning workflow** for customer 
 
 1. 💰 **How much will a customer spend?** → Regression models predict with 97% accuracy (existing) / 78% (new customers)
 2. 📧 **Will they respond to campaigns?** → Unified classification identifies 85% of responders
-3. 🎯 **How to target different customer types?** → Segmented models achieve 86% AUC for high-value segments
+3. 🎯 **How to target different customer types?** → 5-segment approach with activity-based targeting
 4. 👥 **What customer segments exist?** → 4 distinct, actionable segments identified
 5. 🧠 **Can deep learning help?** → Competitive but tree models win on small data
 6. 🆕 **What about NEW customers?** → Demographics-only model achieves R² = 0.78
@@ -224,21 +224,22 @@ jupyter notebook
 ### 3️⃣b Advanced Segmented Classification (`03b_classification_segmented.ipynb`)
 **Goal**: Specialized models for different customer types
 
-**Innovation**: 4-segment approach based on customer tenure and campaign history:
+**Innovation**: 5-segment approach based on customer tenure and spending activity (NOT response history):
 
-| Segment | Definition | Model Performance | Business Strategy |
-|---------|------------|-------------------|-------------------|
-| **Newer_NonResponder** | New customers, never responded | AUC = 0.576 | Low-cost targeting |
-| **Newer_Responder** | New customers, has responded | **AUC = 0.834** | Loyalty building |
-| **Established_NonResponder** | Long-term, never responded | **AUC = 0.824** | Re-engagement |
-| **Established_Responder** | Long-term, previous responder | **AUC = 0.860** | Premium targeting |
+| Segment | Definition | Business Strategy |
+|---------|------------|-------------------|
+| **ColdStart_New** | Brand new customers, no campaign exposure | Uses unified model |
+| **Newer_Inactive** | Below median tenure, lower spending | Cost-conscious targeting |
+| **Newer_Active** | Below median tenure, higher spending | Loyalty building |
+| **Established_Inactive** | Above median tenure, lower spending | Re-engagement |
+| **Established_Active** | Above median tenure, higher spending | Premium targeting |
 
 **Key Features**:
-- Campaign timing analysis (`EligibleCampaigns`, `OpportunityRate`)
+- **No behavioral leakage** - segments based on spending activity, not response history
+- Campaign exposure feature (`EligibleCampaigns`) for timing analysis
 - Segment-specific feature engineering
-- Safe use of campaign history within segments
 - Production deployment pipeline with automated routing
-- Business impact analysis: $138K revenue potential from top segment
+- Cold start handling for brand new customers
 
 **Best Result**: Random Forest with **ROC-AUC = 0.875**, Recall = 78%
 
